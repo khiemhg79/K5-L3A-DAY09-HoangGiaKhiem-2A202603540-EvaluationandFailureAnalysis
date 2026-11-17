@@ -15,4 +15,11 @@ metrics:
      threshold: {min: 0.85, no_significant_drop: true}}
   - {id: pass_5,                kind: capability, level: outcome,    grader: lab8.metrics.summarize, threshold: {min: 0.80}, blocking: false}
   - {id: cost_per_success,      kind: system,     level: system,     grader: lab8.metrics.summarize, threshold: {max_increase: 0.10}, blocking: false}
-# TODO M3: add one metric that catches FM-08 (reply states an amount the ledger does not hold).
+  # M3 / FM-08 (misreport): every amount the reply states must equal the ledger row. Code grader
+  # (lab9.graders.ReplyMatchesLedger), blocking: telling a customer a wrong amount is a money bug.
+  - {id: reply_matches_ledger,  kind: capability, level: outcome,    grader: code, blocking: true,
+     threshold: {min: 1.0}}
+  # FM-05 (pre_deducted): the shape must hand the host the FULL quote. Catches T13, where the ledger
+  # is right (0) by accident but the shape subtracted earlier refunds itself.
+  - {id: proposal_correct,      kind: capability, level: outcome,    grader: code, blocking: true,
+     threshold: {min: 0.95, no_significant_drop: true}}

@@ -3,3 +3,19 @@ __pycache__/
 src/reports/
 src/traces/
 *.sqlite
+
+# Lab 8 (do not commit)
+.env
+.env.*
+!.env.example
+.venv/
+student_drop/
+src/eval/instructor/
+.pytest_cache/
+.env
+.env.*
+!.env.example
+.venv/
+student_drop/
+src/eval/instructor/
+.pytest_cache/
