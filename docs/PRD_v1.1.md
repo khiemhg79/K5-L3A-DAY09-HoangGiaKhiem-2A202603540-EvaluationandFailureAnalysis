@@ -1,4 +1,4 @@
-# PRD v1.1 — LogiX-VN refund agent (bổ sung phần đánh giá)
+﻿# PRD v1.1 — LogiX-VN refund agent (bổ sung phần đánh giá)
 
 > v1.0 là PRD của Lab 8. v1.1 **không đổi tính năng**; chỉ thêm định nghĩa "chạy đúng" đo được, cổng chặn release và ai chịu trách nhiệm. Mọi con số phải lấy từ report do script sinh ra (dẫn run ID), không gõ tay.
 
@@ -68,5 +68,5 @@ Quy tắc: tiền và phê duyệt luôn chấm bằng code. Judge chỉ dùng c
 ## Phê duyệt
 | Vai trò | Tên | Ngày |
 |---|---|---|
-| Product | `<tên>` | |
+| Product | N/A (bài cá nhân) | |
 | Eval owner (giữ gate) | Hoàng Gia Khiêm (2A202603540) | 2026-11-17 |
