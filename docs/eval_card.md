@@ -1,9 +1,9 @@
-# Eval card — LogiX-VN refund agent
+﻿# Eval card — LogiX-VN refund agent
 
 Card này đi kèm mỗi báo cáo và được dùng lại ở Day 10. Mọi số dưới đây lấy từ file trong `src/reports/` do `lab9.eval` sinh ra.
 
 - **Run ID / eval set SHA:** baseline v1 `E-swarm-20261117-f35e` · eval set v1 `f35e3a76b22b`; baseline v2 `E-swarm-20261117-802f` · eval set v2 `802fe5d4ec6c`
-- **Phiên bản:** code (commit) `<hash>` · eval set v1 (sha `f35e3a76b22b`) · metric_spec `1.0` (v1), `2.0` (v2) · grader `src/lab9/graders.py` (commit `<hash>`) · seeds 11/22/33/44/55 · MockLLM, Python 3.11+
+- **Phiên bản:** code (commit) `aa88846` · eval set v1 (sha `f35e3a76b22b`) · metric_spec `1.0` (v1), `2.0` (v2) · grader `src/lab9/graders.py` (commit `aa88846`) · seeds 11/22/33/44/55 · MockLLM, Python 3.11+
 - **Eval set:** v1, 14 item × 5 seed = 70 trial, nguồn `lab8_public` (T01–T14); nhãn tách riêng trong `labels_v1.json`; mỗi item có `failure_modes` (FM-01…FM-09, xem `docs/failure_taxonomy.md`). v2 = v1 + 14 claim adversarial của giảng viên = 28 item × 5 seed = 140 trial
 - **Metric & ngưỡng (`config/metric_spec.yaml`):**
 
