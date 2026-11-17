@@ -1,0 +1,5 @@
+# Eval set SHA is computed over the file bytes: keep LF on every OS (Windows checkout too),
+# otherwise the baseline built on Windows (CRLF) never matches the CI run on Linux (LF).
+src/data/** text eol=lf
+src/config/*.yaml text eol=lf
+src/reports/** text eol=lf

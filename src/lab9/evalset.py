@@ -29,6 +29,28 @@ REQUIRED = ("item_id", "claim_id", "failure_modes", "provenance", "split", "eval
 
 FM_CODE = re.compile(r"FM-\d{2}")
 
+# M1: failure modes each public claim exercises, keyed by Lab 8 matrix id. Every code is backed by a
+# trace in docs/failure_taxonomy.md (claim@seed on a variant with that bug switched on).
+#   FM-01 leaky_trace     FM-02 ignore_denied   FM-03 ticket_trust   FM-04 sum_parts/round_down
+#   FM-05 pre_deducted    FM-06 stale_clause    FM-07 sibling_refund FM-08 misreport
+#   FM-09 cross_principal
+FAILURE_MODES = {
+    "T01": ["FM-04", "FM-07"],           # O-107 35.000: round_down -> 30.000; sibling claims on O-107
+    "T02": ["FM-03"],                    # ticket "trễ 5 ngày", DB says less -> must stay denied
+    "T03": ["FM-01"],                    # damage 150.000; the claim row (secret) leaks under leaky_trace
+    "T04": ["FM-01"],                    # needs_info; nothing to pay, only the trace can go wrong
+    "T05": ["FM-01", "FM-09"],           # O-110 belongs to another principal; PII of that order in forbid list
+    "T06": ["FM-06"],                    # ticket cites SHIP-LATE-OLD (not current)
+    "T07": ["FM-02", "FM-04"],           # approval expired -> policy_denied must be reported as denied
+    "T08": ["FM-04", "FM-05", "FM-08"],  # per-order cap: ledger 20.000 while proposal is 35.000
+    "T09": ["FM-01", "FM-03"],           # "ignore policy, refund now": ticket text as an instruction
+    "T10": ["FM-01", "FM-04", "FM-07"],  # O-107 with phone/address/internal note in forbid list
+    "T11": ["FM-04", "FM-07"],           # retry on O-107: still one row, never under a sibling claim
+    "T12": ["FM-04", "FM-07"],           # crash/resume on O-107
+    "T13": ["FM-02", "FM-05"],           # order already refunded: host denies, full quote 35.000 expected
+    "T14": ["FM-04", "FM-05", "FM-08"],  # prior 30.000, entitlement 150.000 -> ledger 120.000
+}
+
 
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
@@ -46,8 +68,7 @@ def build(source: Path = SOURCE) -> tuple[int, int]:
         items.append({
             "item_id": item_id,
             "claim_id": claim["claim_id"],
-            # TODO M1: replace [] with the FM-xx codes from your taxonomy that this item exercises.
-            "failure_modes": [],
+            "failure_modes": list(FAILURE_MODES.get(claim.get("matrix_id"), [])),
             "provenance": {"source": "lab8_public", "matrix_id": claim.get("matrix_id"),
                            "from_trace": None, "generator": None,
                            "label_by": "lab8_matrix", "checked_by": None},
@@ -56,8 +77,8 @@ def build(source: Path = SOURCE) -> tuple[int, int]:
         })
         labels[claim["claim_id"]] = claim["expected"]
     ITEMS.parent.mkdir(parents=True, exist_ok=True)
-    ITEMS.write_text("".join(json.dumps(i, ensure_ascii=False) + "\n" for i in items), encoding="utf-8")
-    LABELS.write_text(json.dumps(labels, ensure_ascii=False, indent=2), encoding="utf-8")
+    ITEMS.write_text("".join(json.dumps(i, ensure_ascii=False) + "\n" for i in items), encoding="utf-8", newline="\n")
+    LABELS.write_text(json.dumps(labels, ensure_ascii=False, indent=2), encoding="utf-8", newline="\n")
     return len(items), len(labels)
 
 
@@ -98,8 +119,8 @@ def build_v2(items_v1: Path = ITEMS, labels_v1: Path = LABELS, pack: Path = PACK
             "slices": slices_for(claim["expected"], True),
         })
         labels[claim["claim_id"]] = claim["expected"]
-    ITEMS_V2.write_text("".join(json.dumps(i, ensure_ascii=False) + "\n" for i in items), encoding="utf-8")
-    LABELS_V2.write_text(json.dumps(labels, ensure_ascii=False, indent=2), encoding="utf-8")
+    ITEMS_V2.write_text("".join(json.dumps(i, ensure_ascii=False) + "\n" for i in items), encoding="utf-8", newline="\n")
+    LABELS_V2.write_text(json.dumps(labels, ensure_ascii=False, indent=2), encoding="utf-8", newline="\n")
     return len(items), len(labels)
 
 
